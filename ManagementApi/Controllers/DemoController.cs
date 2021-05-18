@@ -11,7 +11,7 @@ namespace ManagementApi.Controllers
 
         // GET /status
         [HttpGet("/status")]
-        public ActionResult GetStatus()
+        public ActionResult<StatusResponse> GetStatus()
         {
             var response = new StatusResponse
             {
