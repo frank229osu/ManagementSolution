@@ -20,15 +20,29 @@ namespace ManagementApi.Controllers
         [HttpGet("/status")]
         public async Task<ActionResult<StatusResponse>> GetStatus()
         {
-            StatusResponse response = await _statusLookup.GetMyStatus();
+            try
+            {
+                StatusResponse response = await _statusLookup.GetMyStatus();
 
-            return Ok(response);
+                return Ok(response);
+            }
+            catch (StatusServerUnavailableExceptions)
+            {
+
+                return Ok(new StatusResponse
+                {
+                    Status = "Unavailable",
+                    ErrorReason = "The Status Server is Temporarily Unavailble. Try Again Later"
+                });
+            }
         }
     }
 
     public class StatusResponse
     {
         public string Status { get; set; }
-        public DateTime LastChecked { get; set; }
+        public DateTime? LastChecked { get; set; }
+
+        public string ErrorReason { get; set; }
     }
 }
