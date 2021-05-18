@@ -48,8 +48,8 @@ namespace ManagementApiIntegrationTests
 
             var entity = await response.Content.ReadAsAsync<StatusResponse>();
 
-            Assert.Equal("Looks Good To Me!", entity.status);
-            Assert.Equal(DateTime.Now, entity.lastChecked);
+            Assert.Equal("TACOS ARE GOOD", entity.status);
+            Assert.Equal(new DateTime(1969,4,20,23,59,00), entity.lastChecked);
         }
     }
 

@@ -3,11 +3,13 @@ using ManagementApi.Controllers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace ManagementApiIntegrationTests
 {
@@ -26,21 +28,29 @@ namespace ManagementApiIntegrationTests
                 });
 
                 services.Remove(descriptor);
-                services.AddTransient<ILookupServerStatus, StubbedServerStatus>();
+                var stubbedServerStatus = new Mock<ILookupServerStatus>();
+                stubbedServerStatus.Setup(s => s.GetMyStatus()).Returns(
+                    Task.FromResult(new ManagementApi.Controllers.StatusResponse
+                    {
+                        Status = "TACOS ARE GOOD",
+                        LastChecked = new DateTime(1969, 4, 20, 23, 59, 00)
+                    }
+                        ));
+                services.AddTransient<ILookupServerStatus>((_) => stubbedServerStatus.Object);
 
             });
         }
     }
 
-    public class StubbedServerStatus : ILookupServerStatus
-    {
-        public Task<ManagementApi.Controllers.StatusResponse> GetMyStatus()
-        {
-            return Task.FromResult(new ManagementApi.Controllers.StatusResponse
-            {
-                Status = "TACOS ARE GOOD",
-                LastChecked = new DateTime(1969,4,20,23,59,00)
-            })l
-        }
-    }
+    //public class StubbedServerStatus : ILookupServerStatus
+    //{
+    //    public Task<ManagementApi.Controllers.StatusResponse> GetMyStatus()
+    //    {
+    //        return Task.FromResult(new ManagementApi.Controllers.StatusResponse
+    //        {
+    //            Status = "TACOS ARE GOOD",
+    //            LastChecked = new DateTime(1969, 4, 20, 23, 59, 00)
+    //        });
+    //    }
+    //}
 }
