@@ -1,3 +1,4 @@
+using ManagementApi.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +32,12 @@ namespace ManagementApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ManagementApi", Version = "v1" });
             });
+
+            //services.AddSingleton
+            //services.AddTransient
+            //services.AddScoped
+
+            services.AddTransient<ILookupServerStatus, BishalStatusLookup>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

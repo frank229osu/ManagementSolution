@@ -8,16 +8,19 @@ namespace ManagementApi.Controllers
 {
     public class DemoController : ControllerBase
     {
+        private readonly ILookupServerStatus _statusLookup;
+
+        public DemoController(ILookupServerStatus statusLookup)
+        {
+            _statusLookup = statusLookup;
+        }
+
 
         // GET /status
         [HttpGet("/status")]
-        public ActionResult<StatusResponse> GetStatus()
+        public async Task<ActionResult<StatusResponse>> GetStatus()
         {
-            var response = new StatusResponse
-            {
-                Status = "Looks Good!",
-                LastChecked = DateTime.Now
-            };
+            StatusResponse response = await _statusLookup.GetMyStatus();
 
             return Ok(response);
         }
