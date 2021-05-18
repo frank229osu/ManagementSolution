@@ -44,7 +44,12 @@ namespace ManagementApiIntegrationTests
         [Fact]
         public async Task HasCorrectEntity()
         {
+            var response = await _client.GetAsync("/status");
 
+            var entity = await response.Content.ReadAsAsync<StatusResponse>();
+
+            Assert.Equal("Looks Good!", entity.status);
+            Assert.Equal(DateTime.Now, entity.lastChecked);
         }
     }
 
@@ -54,5 +59,10 @@ namespace ManagementApiIntegrationTests
         public string status { get; set; }
         public DateTime lastChecked { get; set; }
     }
+
+
+
+
+
 
 }
