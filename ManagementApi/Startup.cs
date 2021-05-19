@@ -1,7 +1,9 @@
 using ManagementApi.Controllers;
+using ManagementApi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,6 +45,11 @@ namespace ManagementApi
 
             services.AddTransient<ILookupServerStatus, BishalStatusLookup>();
             services.AddHttpClient();
+
+            services.AddDbContext<ManagementDataContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("management"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
