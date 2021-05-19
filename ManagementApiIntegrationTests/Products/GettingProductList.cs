@@ -40,11 +40,18 @@ namespace ManagementApiIntegrationTests.Products
         {
             // begin a transaction
             // POST /products
+            var response = await _client.PostAsJsonAsync("/products",
+                new { name = "Test Product 1", price = 8.99M });
 
 
             // assert on it
-            
-            // roll it back.
+            Assert.True(response.IsSuccessStatusCode);
+
+
+            var product = await response.Content.ReadAsAsync<PostProductResponse>();
+
+            Assert.Equal("Test Product 1", product.name);
+            Assert.Equal(8.99M, product.price);
 
         }
     }
@@ -58,6 +65,15 @@ namespace ManagementApiIntegrationTests.Products
     }
 
     public class GetProductsResponseItem
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public decimal price { get; set; }
+    }
+
+
+
+    public class PostProductResponse
     {
         public int id { get; set; }
         public string name { get; set; }

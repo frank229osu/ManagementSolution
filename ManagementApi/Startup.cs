@@ -43,6 +43,7 @@ namespace ManagementApi
             //services.AddTransient
             //services.AddScoped
 
+            services.AddTransient<ISummarizeItems, StandardSummarizer>();
             services.AddTransient<ILookupServerStatus, BishalStatusLookup>();
             services.AddHttpClient();
 

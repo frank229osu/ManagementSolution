@@ -20,5 +20,7 @@ namespace ManagementApi.Models.Products
     //}
 
     public record GetProductResponseItem(int Id, string Name, decimal Price);
-    public record GetProductsResponse(List<GetProductResponseItem> Data);
+    public record GetProductsResponse(List<GetProductResponseItem> Data, GetProductSummary Summary);
+
+    public record GetProductSummary(int NumberOfProducts, int NumberCloseToBackorder);
 }

@@ -12,10 +12,31 @@ namespace ManagementApi.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ManagementDataContext _context;
+        private readonly ISummarizeItems _summarizer;
 
         public ProductsController(ManagementDataContext context)
         {
             _context = context;
+        }
+
+        [HttpPost("products")]
+        public async Task<ActionResult> AddAProduct([FromBody] GetProductResponseItem item)
+        {
+            // validation 
+
+            var productToSave = new Product
+            {
+                Name = item.Name,
+                Price = item.Price
+            };
+            _context.Products.Add(productToSave);
+            await _context.SaveChangesAsync();
+            var response = new GetProductResponseItem(
+                productToSave.Id,
+                productToSave.Name, productToSave.Price
+                );
+
+            return StatusCode(201, response);
         }
 
         [HttpGet("products")]
@@ -33,7 +54,8 @@ namespace ManagementApi.Controllers
                 .Select(product => new GetProductResponseItem(product.Id, product.Name, product.Price))
                 .ToListAsync();
 
-            var response = new GetProductsResponse(items);
+            GetProductSummary summary = _summarizer.GetSummaryFor(items);
+            var response = new GetProductsResponse(items, summary);
 
             return Ok(response);
         }
