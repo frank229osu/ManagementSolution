@@ -9,11 +9,11 @@ using Xunit;
 
 namespace ManagementApiIntegrationTests.Products
 {
-    public class GettingProductList : IClassFixture<CustomWebApplicationFactory>
+    public class GettingProductList : IClassFixture<DockerSqlWebApplicationFactory>
     {
 
         private readonly HttpClient _client;
-        public GettingProductList(CustomWebApplicationFactory factory)
+        public GettingProductList(DockerSqlWebApplicationFactory factory)
         {
             _client = factory.CreateDefaultClient();
         }
@@ -32,7 +32,20 @@ namespace ManagementApiIntegrationTests.Products
 
             var content = await response.Content.ReadAsAsync<GetProductsResponse>();
 
-            Assert.Equal(3, content?.data?.Length);
+            Assert.True(content?.data?.Length > 0);
+        }
+
+        [Fact]
+        public async Task AddingaProduct()
+        {
+            // begin a transaction
+            // POST /products
+
+
+            // assert on it
+            
+            // roll it back.
+
         }
     }
 
